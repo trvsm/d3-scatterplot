@@ -1,18 +1,32 @@
 /* global d3*/
 
 //create svg
+const width = 800;
+const height = 500;
+const padding = 30;
+
+const svg = d3
+  .select("#container")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
+
+// Title element with id=title
+svg
+  .append("title")
+  .attr("id", "title")
+  .text("Cyclist Times & Doping Allegations");
 
 const getData = async () => {
   const data = await d3.json(
     "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json"
   );
   console.log(data);
+  //TODO: add axes
   return data;
 };
 
-// Title element with id=title
-
-//x-axis with id=s-axis
+//x-axis with id=x-axis
 //y-axis with id=y-axis
 //dots each with class=dot representing data
 //each dot has data-xvalue and data-yvalue matching the x and y values
