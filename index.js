@@ -1,3 +1,32 @@
 /* global d3*/
 
-console.log(d3.max([1, 3]));
+//create svg
+
+const getData = async () => {
+  const data = await d3.json(
+    "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json"
+  );
+  console.log(data);
+  return data;
+};
+
+// Title element with id=title
+
+//x-axis with id=s-axis
+//y-axis with id=y-axis
+//dots each with class=dot representing data
+//each dot has data-xvalue and data-yvalue matching the x and y values
+//data-xval&yval within range of data, in correct format
+//data-xval integer full year or Date, data-yval minutes in Date
+//data-xval and dot align with point on x-ax
+//data-yval & dot align with point on y-ax
+//tick labels on y-ax wit %M:%S time format does % here mean modulo?
+//multiple tick labels on x-ax that show year
+//range of x-ax labels within range of x-ax data
+//range of y-ax labels with range of y-ax data
+//legend with id=legend & descriptive text
+//can mouseover area and see tooltip with id=tooltip with more into
+//tooltip should have data-year that corresponds to data-xval of active
+
+//append svg to container
+getData();
