@@ -1,10 +1,10 @@
 /* global d3*/
 
-//create svg
 const width = 800;
 const height = 500;
 const padding = 30;
 
+//create svg
 const svg = d3
   .select("#container")
   .append("svg")
@@ -17,6 +17,7 @@ svg
   .attr("id", "title")
   .text("Cyclist Times & Doping Allegations");
 
+// fetch and process data
 const getData = async () => {
   const data = await d3.json(
     "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json"
@@ -34,8 +35,7 @@ const getData = async () => {
   const maxYear = d3.max(datasetByYear, (d) => d.Year);
 
   //legend with id=legend & descriptive text
-  const legend = d3
-    .select("#container")
+  d3.select("#details")
     .append("div")
     .attr("id", "legend")
     .text(
@@ -43,6 +43,9 @@ const getData = async () => {
     )
     .attr("x", padding)
     .attr("y", padding);
+
+  //create tooltip
+  const tooltip = d3.select("#details").append("div").attr("id", "tooltip");
 
   const xScale = d3
     .scaleLinear([minYear, maxYear], [padding, width - padding])
@@ -105,14 +108,23 @@ const getData = async () => {
     .attr("data-yvalue", (d) => new Date(0, 0, 0, 0, 0, d.Seconds))
     .attr("style", (d) => {
       return d.Doping ? "fill: red" : "fill: blue";
+    })
+    //can mouseover area and see tooltip with id=tooltip with more into
+    .on("mouseover", (e, d) => {
+      console.log(e.currentTarget.__data__);
+      const entry = e.currentTarget.__data__;
+      tooltip
+        .html(
+          `Cyclist: ${entry.Name}\nYear: ${entry.Year}\n Time: ${entry.Time}\n Place: ${entry.Place}`
+        )
+        //tooltip should have data-year that corresponds to data-xval of active
+        .attr("data-year", entry.Year)
+        .style("display", "block");
+      // const year=e.currentTarget.__data__
+    })
+    .on("mouseout", () => {
+      tooltip.style("display", "none");
     });
-
-  console.log(datasetByYear);
-  return data;
 };
 
-//can mouseover area and see tooltip with id=tooltip with more into
-//tooltip should have data-year that corresponds to data-xval of active
-
-//append svg to container
 getData();

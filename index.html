@@ -9,8 +9,17 @@
             color: black;
         }
 
-        #legend {
+        #details {
             display: flex;
+            width: 300px;
+            flex-direction: row;
+        }
+
+        #legend {
+            width: 150px;
+        }
+
+        #tooltip {
             width: 150px;
         }
     </style>
@@ -18,6 +27,7 @@
 <body>
     <h1>Scatterplot using <a href="https://www.d3js.org">D3</a></h1>
     <div id="container"></div>
+    <div id="details"></div>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <!-- Do not set script as module when using CDN -->
     <script src="./index.js"></script>
