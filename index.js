@@ -32,6 +32,18 @@ const getData = async () => {
   //range of x-ax labels within range of x-ax data
   const minYear = d3.min(datasetByYear, (d) => d.Year);
   const maxYear = d3.max(datasetByYear, (d) => d.Year);
+
+  //legend with id=legend & descriptive text
+  const legend = d3
+    .select("#container")
+    .append("div")
+    .attr("id", "legend")
+    .text(
+      `Legend:\nCyclist times & doping allegations\n${minYear} to ${maxYear}, red points indicate doping allegations`
+    )
+    .attr("x", padding)
+    .attr("y", padding);
+
   const xScale = d3
     .scaleLinear([minYear, maxYear], [padding, width - padding])
     .nice();
@@ -58,26 +70,28 @@ const getData = async () => {
     0,
     d3.max(datasetByYear, (d) => d.Seconds)
   );
+  const timeFormat = d3.timeFormat("%M:%S");
   const yScale = d3
     .scaleUtc([minTime, maxTime], [height - padding, padding])
     .nice();
   //y-axis with id=y-axis
 
-  //TODO: get y-ax showing accurate time & format
   const yAx = svg
     .append("g")
     .attr("transform", `translate(${padding},0)`)
     .attr("id", "y-axis")
-    .call(d3.axisLeft(yScale));
+    //data-yval & dot align with point on y-ax (adding tickformat lines things up)
+    //tick labels on y-ax wit %M:%S time format does % here mean modulo?
+    //range of y-ax labels with range of y-ax data
+    .call(d3.axisLeft(yScale).tickFormat(timeFormat)); //set tickformat on axis
 
   //cx, cy set coordinates, r attr is circle radius
   //dots each with class=dot representing data
   //each dot has data-xvalue and data-yvalue matching the x and y values
   //data-xval & yval within range of data, in correct format
   //data-xval integer full year or Date, data-yval minutes in Date
+  //data-xval and dot align with point on x-ax
 
-  //TODO: line up dots with axes (padding)
-  //TODO: make dots visible
   svg
     .selectAll("circle")
     .data(datasetByYear)
@@ -88,17 +102,15 @@ const getData = async () => {
     .attr("r", 3)
     .attr("class", "dot")
     .attr("data-xvalue", (d) => d.Year)
-    .attr("data-yvalue", (d) => new Date(0, 0, 0, 0, 0, d.Seconds));
+    .attr("data-yvalue", (d) => new Date(0, 0, 0, 0, 0, d.Seconds))
+    .attr("style", (d) => {
+      return d.Doping ? "fill: red" : "fill: blue";
+    });
 
-  console.log(minTime);
+  console.log(datasetByYear);
   return data;
 };
 
-//data-xval and dot align with point on x-ax
-//data-yval & dot align with point on y-ax
-//tick labels on y-ax wit %M:%S time format does % here mean modulo?
-//range of y-ax labels with range of y-ax data
-//legend with id=legend & descriptive text
 //can mouseover area and see tooltip with id=tooltip with more into
 //tooltip should have data-year that corresponds to data-xval of active
 
