@@ -83,7 +83,7 @@ const getData = async () => {
     .data(datasetByYear)
     .enter()
     .append("circle")
-    .attr("cx", (d) => d.Year)
+    .attr("cx", (d) => xScale(d.Year))
     .attr("cy", (d) => yScale(new Date(0, 0, 0, 0, 0, d.Seconds)))
     .attr("r", 3)
     .attr("class", "dot")
